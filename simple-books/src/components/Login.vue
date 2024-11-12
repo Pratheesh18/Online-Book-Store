@@ -1,0 +1,68 @@
+<template>
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+      <div class="card shadow-lg p-4" style="max-width: 500px; width: 100%;">
+        <h2 class="text-center mb-4">Login</h2>
+        <form @submit.prevent="handleLogin">
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              id="email"
+              v-model="form.email"
+              class="form-control"
+              placeholder="Enter your email"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              id="password"
+              v-model="form.password"
+              class="form-control"
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
+          <button
+            type="button"
+            class="btn btn-link w-100 text-center"
+            @click="$router.push('/signup')"
+          >
+            Don't have an account? Sign Up
+          </button>
+        </form>
+      </div>
+    </div>
+  </template>
+  
+  <script>
+  import api from "../api/api";
+  
+  export default {
+    data() {
+      return {
+        form: {
+          email: "",
+          password: "",
+        },
+      };
+    },
+    methods: {
+      async handleLogin() {
+        try {
+          const response = await api.post("/auth/login", this.form);
+          const token = response.data.token;
+          localStorage.setItem("token", token);
+          alert("Login Successful");
+          this.$router.push("/dashboard");
+        } catch (error) {
+          alert("Login failed. Please check your credentials.");
+        }
+      },
+    },
+  };
+  </script>
+  
