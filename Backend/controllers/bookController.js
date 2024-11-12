@@ -1,7 +1,7 @@
 const Book = require('../models/bookModel');
 
 
-export const addBook = async (req,res) => {
+const addBook = async (req,res) => {
     try{
         const {title,author,description,genre,price,isbn} = req.body;
         const imageUrl = req.file.path;
@@ -13,7 +13,7 @@ export const addBook = async (req,res) => {
     }
 };
 
-export const getBooks = async (req,res) => {
+ const getBooks = async (req,res) => {
     try{
         const books = await Book.find();
         res.json(books);
@@ -22,7 +22,7 @@ export const getBooks = async (req,res) => {
     }
 };
 
-export const getBookById = async (req,res) => {
+ const getBookById = async (req,res) => {
     try{
         const {id} = req.params;
         const book = await Book.findById(id);
@@ -33,7 +33,7 @@ export const getBookById = async (req,res) => {
     }
 };
 
-export const updateBook = async (req,res) => {
+const updateBook = async (req,res) => {
     try{
         const {id} = req.params;
         const updatedBook = await Book.findByIdAndUpdate(id,req.body,{new:true});
@@ -43,7 +43,7 @@ export const updateBook = async (req,res) => {
     }
 };
 
-const deleteBook = async (req,res) => {
+ const deleteBook = async (req,res) => {
     try{
         const {id} = req.params;
         await Book.findByIdAndDelete(id);
@@ -52,6 +52,8 @@ const deleteBook = async (req,res) => {
         res.status(500).json({error:error.message});
     }
 };
+
+module.exports = {addBook,getBookById,getBooks,updateBook,deleteBook};
 
 
 
