@@ -36,7 +36,11 @@ const addBook = async (req,res) => {
 const updateBook = async (req,res) => {
     try{
         const {id} = req.params;
-        const updatedBook = await Book.findByIdAndUpdate(id,req.body,{new:true});
+        const updatedData = {...req.body};
+        if(req.file){
+            updatedData.imageUrl = `uploads/${req.file.filename}`;
+        }
+        const updatedBook = await Book.findByIdAndUpdate(id,updatedData,{new:true});
         res.json(updatedBook);
     }catch(error){
         res.status(500).json({error:error.message});
