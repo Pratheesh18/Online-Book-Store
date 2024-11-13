@@ -7,7 +7,14 @@
       <button class="btn btn-primary" @click="openAddModal">Add Book</button>
     </div>
 
-    <Search @search="handleSearch" />
+    <div class="row mb-4">
+      <div class="col-12 col-md-8 mb-3 mb-md-0">
+        <Search @search="handleSearch" />
+      </div>
+      <div class="col-12 col-md-4">
+        <Sort @sort="handleSort" />
+      </div>
+    </div>
     <div class="row justify-content-center">
       <div
         v-for="book in filteredBooks"
@@ -19,13 +26,13 @@
             :src="`http://localhost:5000/${book.imageUrl}`"
             class="card-img-top"
             :alt="`Book Cover: ${book.title}`"
-            style="height: 200px; object-fit: cover"
+            style="height: 200px; object-fit: cover;"
           />
           <div class="card-body d-flex flex-column">
             <h5 class="card-title">{{ book.title }}</h5>
             <p class="card-text">Author: {{ book.author }}</p>
-            <p class="card-text">Price : {{ book.price }}</p>
-            <p class="card-text"> ISBN : {{ book.isbn }} </p>
+            <p class="card-text">Price: ${{ book.price }}</p>
+            <p class="card-text">ISBN: {{ book.isbn }}</p>
             <button
               class="btn btn-sm btn-primary mt-auto"
               @click="openEditModal(book)"
@@ -59,12 +66,14 @@ import BookModal from "./BookModal.vue";
 import Search from "./Search.vue";
 import * as bootstrap from "bootstrap";
 import { useToast } from "vue-toastification";
+import Sort from "./Sort.vue";
 
 export default {
-  components: { BookModal, Search },
+  components: { BookModal, Search,Sort },
   data() {
     return {
       books: [],
+      originalBooks:[],
       filteredBooks: [],
       isEditMode: false,
       selectedBook: null,
@@ -79,6 +88,7 @@ export default {
       try {
         const response = await api.get("/books");
         this.books = response.data;
+        this.originalBooks = [...this.books];
         this.filteredBooks = this.books;
         console.log(this.books);
       } catch (error) {
@@ -149,6 +159,15 @@ export default {
       this.filteredBooks = this.books.filter((book) =>
         book.title.toLowerCase().includes(query.toLowerCase())
       );
+    },
+    handleSort(option){
+       if(option === "default"){
+        this.filteredBooks = [...this.originalBooks];
+       }else if(option === "title"){
+        this.filteredBooks.sort((a,b) => a.title.localeCompare(b.title));
+       }else if(option === "price"){
+        this.filteredBooks.sort((a,b) => a.price - b.price)
+       }
     },
     closeModal() {
       const modal = bootstrap.Modal.getInstance(
