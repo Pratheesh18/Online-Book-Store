@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post('/',authenticate,upload.single('image'),booksController.addBook);
 router.get('/',booksController.getBooks);
-router.put('/:id',authenticate,booksController.updateBook);
+router.put('/:id',upload.single('image'),authenticate,booksController.updateBook);
 router.get('/:id',authenticate,booksController.getBookById);
 router.delete('/:id',authenticate,booksController.deleteBook);
 
