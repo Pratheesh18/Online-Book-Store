@@ -38,6 +38,7 @@
     </div>
 
     <BookModal
+       ref="bookModal"
       :isEditMode="isEditMode"
       :existingBook="selectedBook"
       @add-book="addBook"
@@ -80,6 +81,7 @@ export default {
     openAddModal() {
       this.isEditMode = false;
       this.selectedBook = null;
+      this.$refs.bookModal.resetForm();
       const modal = new bootstrap.Modal(document.getElementById("bookModal"));
       modal.show();
       console.log("Clicked");

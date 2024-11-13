@@ -39,25 +39,13 @@ const addBook = async (req,res) => {
 const updateBook = async (req, res) => {
   try {
     const { id } = req.params;
-
-    console.log("Received Form Data:", req.body);
-    console.log("Received File:", req.file);
-
-    // Fetch the existing book document
     const existingBook = await Book.findById(id);
     if (!existingBook) {
       return res.status(404).json({ error: 'Book not found' });
     }
 
     const updateData = { ...req.body };
-
-    // Debugging: Log the request body and file
-    console.log("Request Body:", req.body);
-    console.log("Uploaded File:", req.file);
-
-    // Handle image update if a new file is uploaded
     if (req.file) {
-      // Delete the old image file if it exists
       if (existingBook.imageUrl) {
         const oldImagePath = path.join(__dirname, '..', existingBook.imageUrl);
         if (fs.existsSync(oldImagePath)) {
@@ -65,12 +53,10 @@ const updateBook = async (req, res) => {
           console.log("Old image deleted:", oldImagePath);
         }
       }
-      // Update imageUrl with the new file path
       updateData.imageUrl = `uploads/${req.file.filename}`.replace(/\\/g, '/');
       console.log("New image URL:", updateData.imageUrl);
     }
 
-    // Perform the update with the cleaned data
     const updatedBook = await Book.findByIdAndUpdate(id, { $set: updateData }, { new: true });
     if (!updatedBook) {
       return res.status(404).json({ error: 'Book not found during update' });
