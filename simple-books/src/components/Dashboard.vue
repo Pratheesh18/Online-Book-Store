@@ -1,7 +1,12 @@
 <template>
   <div class="container my-5">
-    <h2 class="text-center mb-4">Books Dashboard</h2>
-    <button class="btn btn-primary mb-4" @click="openAddModal">Add Book</button>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div class="flex-grow-1 text-center">
+        <h2 class="mb-0">Books Dashboard</h2>
+      </div>
+      <button class="btn btn-primary" @click="openAddModal">Add Book</button>
+    </div>
+
     <Search @search="handleSearch" />
     <div class="row justify-content-center">
       <div
@@ -20,6 +25,7 @@
             <h5 class="card-title">{{ book.title }}</h5>
             <p class="card-text">Author: {{ book.author }}</p>
             <p class="card-text">Price : {{ book.price }}</p>
+            <p class="card-text"> ISBN : {{ book.isbn }} </p>
             <button
               class="btn btn-sm btn-primary mt-auto"
               @click="openEditModal(book)"
@@ -38,7 +44,7 @@
     </div>
 
     <BookModal
-       ref="bookModal"
+      ref="bookModal"
       :isEditMode="isEditMode"
       :existingBook="selectedBook"
       @add-book="addBook"
@@ -52,6 +58,7 @@ import api from "../api/api";
 import BookModal from "./BookModal.vue";
 import Search from "./Search.vue";
 import * as bootstrap from "bootstrap";
+import { useToast } from "vue-toastification";
 
 export default {
   components: { BookModal, Search },
@@ -61,6 +68,7 @@ export default {
       filteredBooks: [],
       isEditMode: false,
       selectedBook: null,
+      toast:useToast(),
     };
   },
   async created() {
@@ -74,7 +82,7 @@ export default {
         this.filteredBooks = this.books;
         console.log(this.books);
       } catch (error) {
-        alert("Failed to fetch books");
+        this.toast.error("Failed to fetch books");
         console.error(error);
       }
     },
@@ -84,7 +92,6 @@ export default {
       this.$refs.bookModal.resetForm();
       const modal = new bootstrap.Modal(document.getElementById("bookModal"));
       modal.show();
-      console.log("Clicked");
     },
     openEditModal(book) {
       this.isEditMode = true;
@@ -96,9 +103,10 @@ export default {
       try {
         await api.post("/books", formData);
         await this.fetchBooks();
+        this.toast.success("Book added successfully")
         this.closeModal();
       } catch (error) {
-        alert("Failed to add book");
+        this.toast.error("Failed to add book")
       }
     },
     async updateBook(formData) {
@@ -120,9 +128,9 @@ export default {
           this.filteredBooks.splice(index, 1, updatedBook);
         }
         this.closeModal();
-        alert("Book Updated Successfully");
+        this.toast.success("Book details updated successfully")
       } catch (error) {
-        alert("Failed to update book");
+        this.toast.error("Failed to update book details");
         console.error(error);
       }
     },
@@ -131,9 +139,9 @@ export default {
       try {
         await api.delete(`/books/${id}`);
         await this.fetchBooks();
-        alert("Book deleted successfully");
+        this.toast.success("Book deleted successfully");
       } catch (error) {
-        alert("Failed to delete the book");
+        this.toast.error("Failed to delete the book");
         console.error(error);
       }
     },

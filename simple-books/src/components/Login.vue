@@ -52,6 +52,7 @@
 
 <script>
 import api from "../api/api";
+import { useToast } from "vue-toastification";
 
 export default {
   data() {
@@ -61,6 +62,7 @@ export default {
         password: "",
       },
       passwordVisible: false,
+      toast:useToast(),
     };
   },
   methods: {
@@ -72,10 +74,10 @@ export default {
         const response = await api.post("/auth/login", this.form);
         const token = response.data.token;
         localStorage.setItem("token", token);
-        alert("Login Successful");
+        this.toast.success('Login Successful')
         this.$router.push("/dashboard");
       } catch (error) {
-        alert("Login failed. Please check your credentials.");
+        this.toast.error('Failed to login');
       }
     },
   },

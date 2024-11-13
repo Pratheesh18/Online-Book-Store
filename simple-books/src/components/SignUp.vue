@@ -65,6 +65,7 @@
 
 <script>
 import api from "../api/api";
+import { useToast } from "vue-toastification";
 
 export default {
   data() {
@@ -75,6 +76,7 @@ export default {
         password: "",
       },
       passwordVisible:false,
+      toast : useToast(),
     };
   },
   methods: {
@@ -84,10 +86,10 @@ export default {
     async handleSignUp() {
       try {
         await api.post("/auth/register", this.form);
-        alert("Registration Successful");
+        this.toast.success('Regitration Successful');
         this.$router.push("/");
       } catch (error) {
-        alert("Sign-up failed. Please try again.");
+        this.toast.error('Regitration Failed!');
       }
     },
   },
