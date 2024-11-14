@@ -1,4 +1,4 @@
-# 📚 Book Dashboard Project
+# 📚 Online Book Store
 
 A responsive book management dashboard built using **Vue.js**. This project allows users to manage a collection of books with features like search, sort, add, edit, delete, and image upload. It utilizes a **Node.js** backend with **Express.js** and supports JWT-based user authentication.
 
