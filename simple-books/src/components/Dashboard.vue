@@ -1,26 +1,26 @@
 <template>
   <div class="container my-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <div class="flex-grow-1 text-center">
-        <h2 class="mb-0">Books Dashboard</h2>
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+      <div class="text-center text-md-start">
+        <h2 class="mb-0 display-5 fw-bold">Books Dashboard</h2>
       </div>
-      <button class="btn btn-primary" @click="openAddModal">Add Book</button>
+      <button class="btn btn-primary mt-3 mt-md-0" @click="openAddModal">
+        <i class="bi bi-plus-circle me-2"></i>
+        Add Book
+      </button>
     </div>
 
     <div class="row mb-4">
-      <div class="col-12 col-md-8 mb-3 mb-md-0">
+      <div class="col-12 col-md-8">
         <Search @search="handleSearch" />
       </div>
       <div class="col-12 col-md-4">
         <Sort @sort="handleSort" />
       </div>
     </div>
+
     <div class="row justify-content-center">
-      <div
-        v-for="book in filteredBooks"
-        :key="book._id"
-        class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4"
-      >
+      <div v-for="book in filteredBooks" :key="book._id" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
         <div class="card h-100 shadow-sm">
           <img
             :src="`http://localhost:5000/${book.imageUrl}`"
@@ -29,22 +29,20 @@
             style="height: 200px; object-fit: cover;"
           />
           <div class="card-body d-flex flex-column">
-            <h5 class="card-title">{{ book.title }}</h5>
+            <h5 class="card-title fw-bold">{{ book.title }}</h5>
             <p class="card-text">Author: {{ book.author }}</p>
             <p class="card-text">Price: ${{ book.price }}</p>
             <p class="card-text">ISBN: {{ book.isbn }}</p>
-            <button
-              class="btn btn-sm btn-primary mt-auto"
-              @click="openEditModal(book)"
-            >
-              Edit
-            </button>
-            <button
-              class="btn btn-sm btn-danger mt-2"
-              @click="deleteBook(book._id)"
-            >
-              Delete
-            </button>
+            <div class="mt-auto">
+              <button class="btn btn-sm btn-primary me-2" @click="openEditModal(book)">
+                <i class="bi bi-pencil-square me-1"></i>
+                Edit
+              </button>
+              <button class="btn btn-sm btn-danger" @click="deleteBook(book._id)">
+                <i class="bi bi-trash me-1"></i>
+                Delete
+              </button>
+            </div>
           </div>
         </div>
       </div>
