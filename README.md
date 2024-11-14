@@ -52,7 +52,7 @@ Make sure you have the following installed:
 1. Clone the repository and navigate to the backend folder:
 
    ```bash
-   git clone https://github.com/your-username/book-dashboard.git
+   git clone https://github.com/Pratheesh18/Online-Book-Store.git
    cd Backend
    npm install
    npm start
