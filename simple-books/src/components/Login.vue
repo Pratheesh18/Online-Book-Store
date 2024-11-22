@@ -36,7 +36,10 @@
             </button>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
+        <button type="submit" class="btn btn-primary w-100 mb-3" :disabled="loading">
+          <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <span v-if="!loading"> Login </span>
+        </button>
         <button
           type="button"
           class="btn btn-link w-100 text-center"
@@ -62,6 +65,7 @@ export default {
         password: "",
       },
       passwordVisible: false,
+      loading : false,
       toast:useToast(),
     };
   },
@@ -70,6 +74,7 @@ export default {
       this.passwordVisible = !this.passwordVisible;
     },
     async handleLogin() {
+      this.loading = true;
       try {
         const response = await api.post("/auth/login", this.form);
         const token = response.data.token;
@@ -78,6 +83,8 @@ export default {
         this.$router.push("/dashboard");
       } catch (error) {
         this.toast.error('Failed to login');
+      }finally{
+        this.loading = false;
       }
     },
   },
