@@ -47,8 +47,9 @@
             </button>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary w-100 mb-3">
-          Sign Up
+        <button type="submit" class="btn btn-primary w-100 mb-3" :disabled="loading">
+           <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+           <span v-if="!loading"> Login </span>
         </button>
         <button
           type="button"
@@ -76,6 +77,7 @@ export default {
         password: "",
       },
       passwordVisible:false,
+      loading:false,
       toast : useToast(),
     };
   },
@@ -84,12 +86,15 @@ export default {
         this.passwordVisible = !this.passwordVisible;
     },
     async handleSignUp() {
+      this.loading = true;
       try {
         await api.post("/auth/register", this.form);
         this.toast.success('Regitration Successful');
         this.$router.push("/");
       } catch (error) {
         this.toast.error('Regitration Failed!');
+      }finally{
+        this.loading = false;
       }
     },
   },
